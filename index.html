@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Exploring Indian Art | CLA-I</title>
+<style>
+:root{--dark:#241b16;--cream:#f7efdf;--paper:#fffaf0;--red:#96452b;--gold:#c79642;--green:#294b3d;--line:#dcc7a5}
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:#2b211a;font-family:Arial,sans-serif}
+nav{position:sticky;top:0;z-index:1000;background:var(--dark);color:#fff;padding:14px 5%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 3px 15px #0004}
+.logo{font-family:Georgia;font-weight:bold;letter-spacing:1px}
+nav a{color:white;text-decoration:none;margin-left:20px;font-size:14px}
+nav a:hover{color:#efc56f}
+.hero{min-height:70vh;padding:75px 7%;display:flex;align-items:center;background:linear-gradient(135deg,#3b261c,#8c4028 60%,#b8753c);color:#fff}
+.hero-inner{max-width:900px}.kicker{letter-spacing:4px;font-size:12px;color:#f2cf87;font-weight:bold}
+.hero h1{font-family:Georgia;font-size:clamp(45px,7vw,80px);margin:18px 0 10px}
+.hero h2{font-weight:normal;max-width:750px}.hero p{line-height:1.8;color:#f9ead0}
+.student{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.student div{padding:15px;border:1px solid #ffffff44;border-radius:14px;background:#0002}
+.student b{display:block;color:#f2cf87;font-size:11px;margin-bottom:5px}
+section{padding:75px 7%;max-width:1250px;margin:auto}
+.section-head{margin-bottom:32px}.eyebrow{color:var(--red);font-weight:bold;letter-spacing:3px;font-size:12px}
+.section-head h2{font-family:Georgia;font-size:42px;margin:8px 0}
+.section-head p{line-height:1.7;max-width:800px}
+.intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 8px 25px #43281812}
+.card h3{font-family:Georgia;color:#67301f}
+.card p{line-height:1.65}
+.btn{display:inline-block;padding:10px 17px;background:var(--red);color:white;border-radius:22px;text-decoration:none;border:0;cursor:pointer;font-weight:bold}
+.activity{border-top:1px solid var(--line)}
+.timeline{position:relative;margin-left:20px}.timeline:before{content:"";position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--gold)}
+.titem{position:relative;margin:0 0 22px 45px;padding:22px;background:white;border:1px solid var(--line);border-radius:17px;cursor:pointer;transition:.2s}
+.titem:before{content:"";position:absolute;left:-43px;top:25px;width:20px;height:20px;background:var(--red);border:5px solid var(--cream);border-radius:50%}
+.titem:hover{transform:translateX(5px);box-shadow:0 8px 20px #0001}
+.titem small{color:var(--red);font-weight:bold}
+.tags span{display:inline-block;background:#ead6b1;padding:5px 9px;border-radius:15px;font-size:12px;margin:3px}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:2000;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:var(--paper);max-width:720px;width:100%;max-height:85vh;overflow:auto;padding:32px;border-radius:22px}
+.close{float:right;font-size:28px;cursor:pointer}
+#map{height:620px;border-radius:20px;overflow:hidden;border:8px solid #7a3f25}
+.map-help{background:white;border:1px solid var(--line);border-radius:15px;padding:16px;margin-bottom:18px;line-height:1.6}
+.fusion{max-width:none;background:var(--green);color:#fff}
+.fusion-inner{max-width:1250px;margin:auto}
+.fusion .eyebrow{color:#efc56f}.fusion .section-head h2{color:#fff}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+button{border:0;padding:11px 17px;border-radius:22px;background:#b45b35;color:white;font-weight:bold;cursor:pointer}
+button.alt{background:#d09d45;color:#21170f}
+.gallery{border:12px solid #7a3f25;background:#d8b77a;border-radius:8px;overflow:hidden}
+canvas{display:block;width:100%;height:620px}
+.fusion-info{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.fusion-info div{background:#fff8e9;color:#2b211a;border-radius:15px;padding:18px;line-height:1.6}
+footer{background:var(--dark);color:white;text-align:center;padding:30px;line-height:1.7}
+@media(max-width:850px){.student,.intro-grid,.fusion-info{grid-template-columns:1fr}nav{flex-wrap:wrap;gap:8px}nav a{margin-left:8px}.hero{padding:55px 6%}section{padding:55px 6%}canvas{height:500px}}
+
+.static-map-wrap{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:22px}
+.india-map{position:relative;min-height:680px;border:1px solid #dcc7a5;border-radius:24px;overflow:hidden;background:radial-gradient(circle at 50% 35%,#fff,#f8eedf 58%,#ead8ba);box-shadow:0 18px 45px #462d1918}
+.map-title{position:absolute;z-index:5;top:24px;left:28px;font-size:13px;letter-spacing:3px;font-weight:800;color:#6f4c31}.map-subtitle{position:absolute;z-index:5;top:48px;left:28px;font-size:12px;color:#8d735d}
+.india-outline{position:absolute;width:min(68%,520px);height:92%;left:50%;top:5%;transform:translateX(-50%);filter:drop-shadow(0 14px 12px #412d1e14)}.map-india-label{font:700 25px Georgia,serif;letter-spacing:7px;fill:#6e4e333d}
+.map-pin{position:absolute;z-index:8;width:34px;height:34px;border:0;border-radius:50% 50% 50% 0;transform:translate(-50%,-50%) rotate(-45deg);background:#9a4b32;box-shadow:0 5px 13px #50281440;cursor:pointer}.map-pin span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font:700 12px Arial;color:white;transform:rotate(45deg)}.map-pin:hover,.map-pin.active{background:#5d3c2b;transform:translate(-50%,-50%) rotate(-45deg) scale(1.12)}
+.map-legend{position:absolute;z-index:7;bottom:18px;left:22px;right:22px;display:flex;justify-content:space-between;padding:11px 14px;border-radius:12px;background:#fffaf1e8;font-size:11px;color:#6f5b49}.map-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#9a4b32;margin-right:6px}
+.map-info{padding:26px;border-radius:22px;background:#fffaf2;border:1px solid #dcc7a5;min-height:100%}.info-kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:#9a4b32}.map-info h3{font-family:Georgia;font-size:27px;margin:9px 0 8px;color:#4b3527}.map-info p{font-size:14px;line-height:1.65;color:#6f6257}.location-list{display:grid;gap:8px;margin-top:20px}.location-list button{border:1px solid #dcc7a5;background:#fff;border-radius:10px;padding:10px 12px;text-align:left;color:#5b4433;font-weight:600;cursor:pointer}.location-list button:hover{background:#f4e8d7}.selected-location{margin-top:22px;padding-top:18px;border-top:1px solid #dcc7a5}.selected-location .place{font:700 22px Georgia;color:#4b3527}.selected-location .region{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#9a4b32;font-weight:800}.selected-location .art{margin-top:12px;font-weight:700;color:#604737}.selected-location .desc{margin-top:8px;line-height:1.6;color:#6f6257;font-size:13px}
+@media(max-width:850px){.static-map-wrap{grid-template-columns:1fr}.india-map{min-height:590px}.map-info{min-height:auto}}
+
+/* ===== POLISHED STATIC MAP ===== */
+.art-map-card{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:stretch}
+.real-map{position:relative;min-height:720px;border-radius:26px;overflow:hidden;background:linear-gradient(145deg,#f8eedf,#efe0c5);border:1px solid #d6bd97;box-shadow:0 20px 50px #422b1918}
+.map-heading{position:absolute;z-index:5;left:28px;top:23px;font-size:12px;font-weight:800;letter-spacing:3px;color:#65452f}.map-note{position:absolute;z-index:5;left:28px;top:45px;font-size:12px;color:#8a725e}
+.india-map-svg{width:100%;height:690px;display:block}.india-land{fill:#fffaf0;stroke:#815c3e;stroke-width:5;filter:drop-shadow(0 13px 12px #51331d18)}.coast-line{fill:none;stroke:#b68e62;stroke-width:2;opacity:.5}.guide{fill:none;stroke:#cbb08a;stroke-width:2;stroke-dasharray:5 8;opacity:.55}.india-label{font:700 36px Georgia,serif;letter-spacing:10px;fill:#805f45;opacity:.32;text-anchor:middle}.india-sub{font:700 10px Arial,sans-serif;letter-spacing:3px;fill:#805f45;opacity:.4;text-anchor:middle}
+.svg-marker{cursor:pointer}.svg-marker circle{fill:#93482e;stroke:#fffaf0;stroke-width:5;filter:drop-shadow(0 4px 5px #4b281d44);transition:.2s}.svg-marker text{font:700 12px Arial,sans-serif;fill:white;text-anchor:middle}.svg-marker:hover circle,.svg-marker.active circle{fill:#4f3428;r:17}.map-scale{position:absolute;bottom:18px;left:24px;right:24px;padding:11px 15px;border-radius:12px;background:#fffaf0e8;color:#715b48;font-size:11px;text-align:center}
+.map-details{background:#fffaf2;border:1px solid #d6bd97;border-radius:24px;padding:27px;box-shadow:0 15px 35px #422b1910}.details-number{font-size:10px;letter-spacing:2px;font-weight:800;color:#93482e}.map-details h3{font:700 29px Georgia,serif;color:#493326;margin:10px 0}.map-details p{font-size:14px;line-height:1.65;color:#6f6257}.map-place-list{display:grid;gap:7px;margin-top:22px}.map-place-list button{border:1px solid #dfcdb2;background:#fff;border-radius:11px;padding:10px 12px;text-align:left;color:#604838;font-weight:600;cursor:pointer;transition:.2s}.map-place-list button:hover{background:#f2e5d2;transform:translateX(2px)}
+.map-selected{margin-top:22px;border-top:1px solid #dfcdb2;padding-top:20px}.map-selected .place{font:700 25px Georgia,serif;color:#493326}.map-selected .region{margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#93482e;font-weight:800}.map-selected .art{margin-top:15px;font-weight:700;color:#604838}.map-selected .desc{margin-top:8px;font-size:13px;line-height:1.65;color:#6f6257}
+
+/* ===== POLISHED FUSION ARTWORK ===== */
+.fusion-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.7fr);gap:24px;align-items:start}.artwork-frame{background:#3b281f;padding:16px;border-radius:24px;box-shadow:0 20px 55px #38231925}.artwork-title{color:#e8c77e;text-align:center;font:700 12px Georgia,serif;letter-spacing:4px;padding:5px 0 13px}.artwork-frame canvas{display:block;width:100%;height:auto;border-radius:10px;background:#e8d3a7}.artwork-caption{color:#dbc6a2;font-size:11px;text-align:center;padding:11px 5px 2px;letter-spacing:.4px}
+.fusion-panel{background:#fffaf2;border:1px solid #d6bd97;border-radius:24px;padding:27px;box-shadow:0 15px 35px #422b1910}.fusion-tag{font-size:10px;font-weight:800;letter-spacing:2px;color:#93482e}.fusion-panel h3{font:700 30px Georgia,serif;color:#493326;margin:9px 0}.fusion-intro{font-size:13px;line-height:1.65;color:#6f6257}.fusion-controls{display:grid;gap:9px;margin:22px 0}.fusion-btn{border:1px solid #cdb18d;background:#fff;padding:12px 14px;border-radius:11px;text-align:left;font-weight:700;color:#604838;cursor:pointer;transition:.2s}.fusion-btn:hover{transform:translateY(-1px);box-shadow:0 5px 12px #422b1910}.fusion-btn.primary{background:#93482e;color:white;border-color:#93482e}.fusion-btn.light{background:#f2e6d5}.fusion-info{display:grid;gap:12px;border-top:1px solid #dfcdb2;padding-top:18px}.fusion-info-block{padding:13px;border-radius:12px;background:#f7eddd}.fusion-info-block strong{display:block;font:700 16px Georgia,serif;color:#593d2d;margin-bottom:5px}.fusion-info-block span{font-size:12px;line-height:1.55;color:#756657}.fusion-status{margin-top:17px;padding:10px 12px;border-radius:10px;background:#efe0c7;color:#76563d;font-size:11px;font-weight:700;text-align:center}
+@media(max-width:900px){.art-map-card,.fusion-layout{grid-template-columns:1fr}.real-map{min-height:600px}.india-map-svg{height:590px}}
+
+.timeline-wrap{position:relative;max-width:900px;margin:35px auto;padding-bottom:20px}.timeline-line{position:absolute;left:26px;top:0;bottom:0;width:3px;background:linear-gradient(#c79642,#93482e,#c79642)}.timeline-card{position:relative;margin:0 0 24px 70px;padding:24px 27px;background:#fffaf2;border:1px solid #dcc7a5;border-radius:20px;box-shadow:0 8px 25px #43281810;transition:.2s}.timeline-card:hover{transform:translateX(4px)}.timeline-dot{position:absolute;left:-60px;top:25px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#93482e;color:#fff;font-weight:800;border:5px solid #f7efdf}.timeline-date{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#93482e;font-weight:800}.timeline-card h3{font:700 28px Georgia,serif;color:#493326;margin:8px 0 4px}.timeline-art{font-weight:700;color:#70513e}.timeline-card p{font-size:13px;line-height:1.65;color:#6f6257}.timeline-btn{margin-top:9px;border:0;background:#93482e;color:#fff;padding:10px 15px;border-radius:20px;font-weight:700;cursor:pointer}.timeline-modal{display:none;position:fixed;inset:0;z-index:2000;background:#211812aa;align-items:center;justify-content:center;padding:20px}.timeline-modal.show{display:flex}.timeline-modal-box{position:relative;width:min(720px,95vw);max-height:88vh;overflow:auto;background:#fffaf2;border-radius:25px;padding:34px}.timeline-close{position:absolute;right:18px;top:15px;border:0;background:#f0e1ce;width:35px;height:35px;border-radius:50%;font-size:25px;cursor:pointer}.modal-kicker{font-size:10px;font-weight:800;letter-spacing:2px;color:#93482e}.modal-period{font-size:12px;color:#8b735f;margin-top:10px}.timeline-modal-box h3{font:700 38px Georgia,serif;color:#493326;margin:7px 0}.modal-art{font-weight:700;color:#93482e;margin-bottom:20px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.modal-grid>div{padding:16px;border-radius:14px;background:#f5e9d8}.modal-wide{grid-column:1/-1}.modal-grid span{font-size:9px;letter-spacing:1.5px;font-weight:800;color:#8c654c}.modal-grid p{font-size:13px;line-height:1.65;color:#625548;margin:7px 0}@media(max-width:700px){.timeline-card{margin-left:55px}.timeline-line{left:20px}.timeline-dot{left:-49px}.modal-grid{grid-template-columns:1fr}.modal-wide{grid-column:auto}}
+</style>
+<style>
+.art-map-card{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px}.real-map{position:relative;min-height:720px;border-radius:26px;overflow:hidden;background:linear-gradient(145deg,#f8eedf,#efe0c5);border:1px solid #d6bd97;box-shadow:0 20px 50px #422b1918}.map-heading{position:absolute;z-index:5;left:28px;top:23px;font-size:12px;font-weight:800;letter-spacing:3px;color:#65452f}.map-note{position:absolute;z-index:5;left:28px;top:45px;font-size:12px;color:#8a725e}.india-map-svg{width:100%;height:690px;display:block}.india-land{fill:#fffaf0;stroke:#815c3e;stroke-width:5}.coast-line{fill:none;stroke:#b68e62;stroke-width:2;opacity:.5}.guide{fill:none;stroke:#cbb08a;stroke-width:2;stroke-dasharray:5 8;opacity:.55}.india-label{font:700 36px Georgia,serif;letter-spacing:10px;fill:#805f45;opacity:.32;text-anchor:middle}.india-sub{font:700 10px Arial,sans-serif;letter-spacing:3px;fill:#805f45;opacity:.4;text-anchor:middle}.svg-marker{cursor:pointer}.svg-marker circle{fill:#93482e;stroke:#fffaf0;stroke-width:5;transition:.2s}.svg-marker text{font:700 12px Arial,sans-serif;fill:#fff;text-anchor:middle}.svg-marker:hover circle,.svg-marker.active circle{fill:#4f3428}.map-scale{position:absolute;bottom:18px;left:24px;right:24px;padding:11px 15px;border-radius:12px;background:#fffaf0e8;color:#715b48;font-size:11px;text-align:center}.map-details{background:#fffaf2;border:1px solid #d6bd97;border-radius:24px;padding:27px}.details-number{font-size:10px;letter-spacing:2px;font-weight:800;color:#93482e}.map-details h3{font:700 29px Georgia,serif;color:#493326;margin:10px 0}.map-details p{font-size:14px;line-height:1.65;color:#6f6257}.map-place-list{display:grid;gap:7px;margin-top:22px}.map-place-list button{border:1px solid #dfcdb2;background:#fff;border-radius:11px;padding:10px 12px;text-align:left;color:#604838;font-weight:600;cursor:pointer}.map-place-list button:hover{background:#f2e5d2}.map-selected{margin-top:22px;border-top:1px solid #dfcdb2;padding-top:20px}.map-selected .place{font:700 25px Georgia,serif;color:#493326}.map-selected .region{margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#93482e;font-weight:800}.map-selected .art{margin-top:15px;font-weight:700;color:#604838}.map-selected .desc{margin-top:8px;font-size:13px;line-height:1.65;color:#6f6257}@media(max-width:900px){.art-map-card{grid-template-columns:1fr}.real-map{min-height:600px}.india-map-svg{height:590px}}
+</style><style>
+.real-map-layout{display:grid;grid-template-columns:minmax(0,1fr) 315px;gap:22px;align-items:start}
+.real-india-map{position:relative;background:#dce8e9;border:1px solid #d4b991;border-radius:24px;overflow:hidden;box-shadow:0 20px 50px #40271918}
+.map-top-label{position:absolute;z-index:20;top:18px;left:23px;font-size:12px;font-weight:800;letter-spacing:3px;color:#553b2d;background:#fffaf0ee;padding:9px 12px;border-radius:9px}
+.map-source-label{position:absolute;z-index:20;top:60px;left:23px;font-size:11px;color:#6e5b4b;background:#fffaf0e8;padding:7px 10px;border-radius:8px}
+.map-image-wrap{position:relative;width:100%;height:680px;display:flex;justify-content:center;align-items:center;background:#dce8e9;overflow:hidden;padding:82px 20px 25px}
+.real-india-image{display:block;width:82%;height:auto;max-height:575px;object-fit:contain;box-shadow:0 12px 30px #263f3b18}
+
+
+.real-pin:hover,.real-pin.active{background:#493126;transform:translate(-50%,-50%) rotate(-45deg) scale(1.16)}
+
+.real-pin:hover::after{display:block}
+.map-credit{padding:9px 16px;background:#fffaf0;font-size:10px;color:#806d5b;text-align:center}
+.real-map-info{background:#fffaf2;border:1px solid #d4b991;border-radius:24px;padding:26px}
+.map-kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:#93482e}
+.real-map-info h3{font:700 28px Georgia,serif;color:#493326;margin:9px 0}
+.real-map-info>p{font-size:13px;line-height:1.6;color:#6f6257}
+.map-location-buttons{display:grid;gap:7px;margin-top:20px}
+.map-location-buttons button{border:1px solid #dfcdb2;background:#fff;border-radius:10px;padding:10px 11px;text-align:left;color:#604838;font-weight:700;cursor:pointer}
+.map-location-buttons button:hover{background:#f2e5d2}
+.map-selected{margin-top:20px;border-top:1px solid #dfcdb2;padding-top:18px}
+.map-selected h4{font:700 24px Georgia,serif;color:#493326;margin:0}
+.map-selected .state{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#93482e;font-weight:800;margin-top:4px}
+.map-selected .art{font-weight:700;color:#604838;margin-top:13px}
+.map-selected .desc{font-size:13px;line-height:1.6;color:#6f6257;margin-top:7px}
+@media(max-width:900px){.real-map-layout{grid-template-columns:1fr}.map-image-wrap{height:560px}.real-india-image{width:88%;max-height:480px}.real-map-info{min-height:auto}}.real-india-map{min-height:520px}.map-image-wrap{padding-top:80px}.real-map-info{min-height:auto}}
+</style>
+<style id="final-fixes">
+/* FINAL ACTIVITY 2 — complete map */
+.full-map-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:stretch}
+.full-map-card{background:#fffaf2;border:1px solid #d4b991;border-radius:24px;overflow:hidden;box-shadow:0 18px 45px #40271918}
+.full-map-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid #e0cdae}
+.full-map-header h3{font:700 28px Georgia,serif;color:#493326;margin:5px 0 0}
+.map-kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:#93482e}
+.map-hint{font-size:11px;color:#715d4d;background:#f4e6d3;padding:8px 11px;border-radius:20px}
+.india-map-stage{background:#dbe7e9;padding:24px;display:flex;justify-content:center;align-items:center;min-height:690px}
+.india-image-holder{position:relative;width:min(100%,920px);line-height:0}
+.full-india-image{display:block;width:100%;height:auto;max-width:none;box-shadow:0 14px 35px #233d3b20}
+
+
+.real-pin:hover,.real-pin.active{
+  background:#4a2b20;
+  transform:translate(-50%,-50%) scale(1.18);
+  z-index:30;
+}
+.map-footnote{padding:10px 16px;background:#fffaf2;font-size:10px;color:#806d5b;text-align:center;border-top:1px solid #e0cdae}
+.map-info-panel{background:#fffaf2;border:1px solid #d4b991;border-radius:24px;padding:25px;box-shadow:0 15px 35px #422b1910}
+.map-info-panel h3{font:700 27px Georgia,serif;color:#493326;margin:8px 0}
+.map-info-panel>p{font-size:13px;line-height:1.6;color:#6f6257}
+.map-location-buttons{display:grid;gap:8px;margin-top:18px}
+.map-location-buttons button{border:1px solid #dbc6a5;background:#fff;border-radius:12px;padding:11px;text-align:left;color:#5b4433;cursor:pointer}
+.map-location-buttons button:hover,.map-location-buttons button.active{background:#f1e2cd;border-color:#a86b47}
+.map-location-buttons b{display:inline-flex;width:24px;height:24px;border-radius:50%;align-items:center;justify-content:center;background:#93482e;color:white;margin-right:7px}
+.map-location-buttons span{display:block;margin:4px 0 0 31px;font-size:10px;color:#806d5b}
+.map-selected{margin-top:20px;padding-top:18px;border-top:1px solid #dcc7a5}
+.map-selected h4{font:700 24px Georgia,serif;margin:0;color:#493326}
+.map-selected .state{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#93482e;font-weight:800;margin-top:5px}
+.map-selected .art{margin-top:13px;font-weight:700;color:#604838}
+.map-selected .desc{margin-top:7px;font-size:13px;line-height:1.65;color:#6f6257}
+
+/* Activity 1 */
+.timeline-card{position:relative;z-index:1}
+.timeline-btn{position:relative;z-index:3}
+.timeline-modal{z-index:3000}
+
+/* Activity 3 */
+.fusion-layout{grid-template-columns:minmax(0,1.55fr) minmax(290px,.7fr)}
+.artwork-frame canvas{width:100%;height:auto;min-height:400px}
+@media(max-width:900px){
+  .full-map-layout{grid-template-columns:1fr}
+  .india-map-stage{min-height:auto;padding:12px}
+  .map-info-panel{padding:20px}
+}
+@media(max-width:650px){
+  .full-map-header{align-items:flex-start;gap:10px;flex-direction:column}
+  
+}
+</style>
+
+
+<style id="number-legend-fix">
+.map-number-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:12px 16px;
+  background:#f8eddd;
+  border-top:1px solid #dfc7a4;
+  border-bottom:1px solid #dfc7a4;
+  justify-content:center;
+  font:10px Arial,sans-serif;
+  color:#604738;
+}
+.map-number-legend strong{
+  width:100%;
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  font-size:9px;
+  color:#93482e;
+  margin-bottom:2px;
+}
+.map-number-legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:#fffaf2;
+  border:1px solid #d8c09f;
+  border-radius:12px;
+  padding:4px 7px;
+}
+.map-number-legend b{
+  width:17px;
+  height:17px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#8d3f28;
+  color:white;
+  font-size:9px;
+}
+@media(max-width:650px){
+  
+  
+}
+</style>
+
+<style id="clean-map-markers">
+.real-pin{
+  position:absolute;
+  z-index:50;
+  width:38px;
+  height:38px;
+  box-sizing:border-box;
+  border:3px solid #fffaf2;
+  border-radius:50%;
+  background:#8f3f27;
+  color:#fff;
+  font:800 15px/1 Arial,sans-serif;
+  cursor:pointer;
+  transform:translate(-50%,-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(40,20,10,.42);
+  padding:0;
+}
+.real-pin:hover,
+.real-pin.active{
+  background:#4d2c21;
+  transform:translate(-50%,-50%) scale(1.16);
+  box-shadow:0 6px 16px rgba(40,20,10,.55);
+}
+.real-pin .pin-label{display:none}
+
+/* Keep the map fully visible on screen */
+.india-map-stage{
+  width:100%;
+  box-sizing:border-box;
+  overflow:visible;
+  padding:20px;
+}
+.india-image-holder{
+  position:relative;
+  width:100%;
+  max-width:920px;
+  margin:0 auto;
+}
+.full-india-image{
+  display:block;
+  width:100%;
+  height:auto;
+  max-width:100%;
+}
+@media(max-width:700px){
+  .india-map-stage{padding:8px}
+  .real-pin{
+    width:30px;
+    height:30px;
+    border-width:2px;
+    font-size:11px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">Vannakodu • CLA-I</div>
+<div>
+<a href="#home">Home</a>
+<a href="#activity1">Timeline</a>
+<a href="#activity2">Map</a>
+<a href="#activity3">Fusion</a>
+</div>
+</nav>
+
+<header class="hero" id="home">
+<div class="hero-inner">
+<div class="kicker">C L A - I  A S S I G N M E N T</div>
+<h1>Exploring Indian Art</h1>
+<h2>Interactive Timeline • Interactive Map • Regional Painting Fusion</h2>
+<p>A digital exploration of Indian art through historical milestones, geographic locations and an original regional-art fusion.</p>
+<div class="student">
+<div><b>STUDENT</b>Nikshitha Sri . P</div>
+<div><b>REGISTRATION NO</b>RA2411003010108</div>
+<div><b>SECTION</b>B1</div>
+<div><b>COURSE OUTCOMES</b>CO1 & CO2</div>
+<div><b>FACULTY</b>DR. M.L. SWORNA KOKILA</div>
+<div><b>COURSE</b>INDIAN ART FORM</div>
+</div>
+</div>
+</header>
+
+<section class="activity" id="activity1">
+<div class="section-head"><span class="eyebrow">ACTIVITY 1 · CO1</span><h2>Interactive Indian Art Timeline</h2><p>Trace selected Indian art traditions across history. Click a milestone to explore its artwork, medium, historical context and artistic significance.</p></div>
+<div class="timeline-wrap"><div class="timeline-line"></div>
+<article class="timeline-card" data-title="Indus Valley" data-period="c. 2500 BCE" data-art="Bronze Dancing Girl" data-medium="Bronze sculpture" data-context="The Indus Valley civilisation produced sophisticated urban settlements and a range of seals, pottery and sculptures. The Dancing Girl is one of its best-known sculptural works." data-significance="The figure demonstrates early Indian metalworking skill and a confident approach to representing the human form."><div class="timeline-dot">1</div><div class="timeline-date">c. 2500 BCE</div><h3>Indus Valley</h3><div class="timeline-art">Bronze Dancing Girl</div><p>Early sculpture and metalworking from one of the subcontinent's earliest urban civilisations.</p><button class="timeline-btn">Explore artwork →</button></article>
+<article class="timeline-card" data-title="Ajanta" data-period="2nd century BCE – 6th century CE" data-art="Narrative Murals" data-medium="Wall painting" data-context="The Ajanta caves contain Buddhist paintings and sculptures developed over several centuries. Their murals portray narratives, figures, gestures and richly detailed environments." data-significance="Ajanta is important for the development of Indian mural painting and for its sophisticated use of line, colour, expression and storytelling."><div class="timeline-dot">2</div><div class="timeline-date">2nd century BCE – 6th century CE</div><h3>Ajanta</h3><div class="timeline-art">Narrative Murals</div><p>Painted cave interiors combining Buddhist stories, expressive figures and detailed visual storytelling.</p><button class="timeline-btn">Explore artwork →</button></article>
+<article class="timeline-card" data-title="Chola" data-period="9th – 13th century" data-art="Nataraja" data-medium="Bronze sculpture" data-context="The Chola period is especially associated with monumental temples and highly refined bronze sculpture in South India." data-significance="The Nataraja image combines movement, symbolism and technical mastery, becoming one of the most recognisable forms of Indian sacred sculpture."><div class="timeline-dot">3</div><div class="timeline-date">9th – 13th century</div><h3>Chola</h3><div class="timeline-art">Nataraja</div><p>Refined South Indian bronze sculpture associated with temple culture and sacred imagery.</p><button class="timeline-btn">Explore artwork →</button></article>
+<article class="timeline-card" data-title="Mughal" data-period="16th – 18th century" data-art="Illustrated Manuscripts" data-medium="Miniature painting" data-context="Mughal ateliers developed a highly detailed miniature-painting tradition for manuscripts and courtly subjects, combining Persianate and Indian visual practices." data-significance="Mughal miniature painting is noted for precise drawing, portraiture, naturalistic observation, rich colour and carefully organised compositions."><div class="timeline-dot">4</div><div class="timeline-date">16th – 18th century</div><h3>Mughal</h3><div class="timeline-art">Illustrated Manuscripts</div><p>Detailed miniature paintings created for manuscripts, courts and historical narratives.</p><button class="timeline-btn">Explore artwork →</button></article>
+<article class="timeline-card" data-title="Madhubani" data-period="18th – 20th century" data-art="Madhubani / Mithila Painting" data-medium="Folk painting" data-context="Madhubani painting developed in the Mithila region and became known for strong outlines, symbolic imagery, natural motifs and densely filled surfaces." data-significance="The tradition preserves community-based visual storytelling and demonstrates how everyday, religious and natural subjects can be expressed through distinctive regional patterns."><div class="timeline-dot">5</div><div class="timeline-date">18th – 20th century</div><h3>Madhubani</h3><div class="timeline-art">Madhubani / Mithila Painting</div><p>A regional folk tradition recognised for bold outlines, symbolism and rhythmic patterning.</p><button class="timeline-btn">Explore artwork →</button></article>
+<article class="timeline-card" data-title="Warli" data-period="20th century" data-art="Community Narratives" data-medium="Wall painting" data-context="Warli painting is associated with communities in Maharashtra and uses simplified geometric figures to represent people, animals, farming, rituals and everyday life." data-significance="Its visual language shows how a small set of shapes and repeated patterns can communicate community memory, relationships and connection with nature."><div class="timeline-dot">6</div><div class="timeline-date">20th century</div><h3>Warli</h3><div class="timeline-art">Community Narratives</div><p>Geometric figures and rhythmic scenes portraying community life, nature and daily activities.</p><button class="timeline-btn">Explore artwork →</button></article>
+</div>
+<div class="timeline-modal" id="timelineModal"><div class="timeline-modal-box"><button class="timeline-close" id="timelineClose">×</button><div class="modal-kicker">INDIAN ART TRADITION</div><div class="modal-period" id="modalPeriod"></div><h3 id="modalTitle"></h3><div class="modal-art" id="modalArt"></div><div class="modal-grid"><div><span>MEDIUM</span><p id="modalMedium"></p></div><div><span>HISTORICAL CONTEXT</span><p id="modalContext"></p></div><div class="modal-wide"><span>ARTISTIC SIGNIFICANCE</span><p id="modalSignificance"></p></div></div></div></div>
+</section>
+
+<section class="activity" id="activity2">
+  <div class="section-head">
+    <span class="eyebrow">ACTIVITY 2 · CO1</span>
+    <h2>Interactive Indian Art Map</h2>
+    <p>Explore important Indian art locations across the country. The complete political map of India is shown at once, with numbered locations you can click.</p>
+  </div>
+
+  <div class="full-map-layout">
+    <div class="full-map-card">
+      <div class="full-map-header">
+        <div>
+          <div class="map-kicker">INDIAN ART HERITAGE</div>
+          <h3>Art Traditions Across India</h3>
+        </div>
+        <div class="map-hint">Click a numbered marker</div>
+      </div>
+
+      <div class="india-map-stage">
+        <div class="india-image-holder">
+          <img
+            class="full-india-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/India_states_and_union_territories_map.svg/960px-India_states_and_union_territories_map.svg.png"
+            alt="Complete political map of India showing states and union territories"
+            loading="eager"
+          >
+          <button class="real-pin" style="left:40.3%;top:51.0%" data-number="1" data-place="Ajanta Caves" data-state="Maharashtra" data-art="Buddhist cave murals" data-desc="Ajanta is renowned for Buddhist cave paintings, sculptures and narrative murals developed over several centuries.">1</button>
+          <button class="real-pin" style="left:40.0%;top:49.5%" data-number="2" data-place="Ellora Caves" data-state="Maharashtra" data-art="Rock-cut architecture" data-desc="Ellora contains Buddhist, Hindu and Jain cave monuments and is especially known for the monolithic Kailasa Temple.">2</button>
+          <button class="real-pin" style="left:50.6%;top:77.5%" data-number="3" data-place="Thanjavur" data-state="Tamil Nadu" data-art="Chola art & temple heritage" data-desc="Thanjavur is closely associated with the Chola artistic legacy, temple architecture and South Indian bronze traditions.">3</button>
+          <button class="real-pin" style="left:50.3%;top:43.4%" data-number="4" data-place="Khajuraho" data-state="Madhya Pradesh" data-art="Temple sculpture" data-desc="Khajuraho is known for richly carved temples and detailed sculptural programmes from the Chandela period.">4</button>
+          <button class="real-pin" style="left:64.0%;top:42.5%" data-number="5" data-place="Madhubani" data-state="Bihar" data-art="Madhubani / Mithila painting" data-desc="The Mithila region is associated with Madhubani painting, recognised for bold outlines, symbolic motifs and dense decorative patterning.">5</button>
+          <button class="real-pin" style="left:41.0%;top:58.0%" data-number="6" data-place="Warli Region" data-state="Maharashtra" data-art="Warli painting" data-desc="Warli painting uses simple geometric figures to portray farming, festivals, people, animals and relationships with nature.">6</button>
+          <button class="real-pin" style="left:67.0%;top:55.0%" data-number="7" data-place="Puri / Raghurajpur" data-state="Odisha" data-art="Pattachitra" data-desc="The Puri region is strongly associated with Odisha's Pattachitra painting tradition and related palm-leaf craft practices.">7</button>
+          <button class="real-pin" style="left:39.2%;top:25.2%" data-number="8" data-place="Jaipur" data-state="Rajasthan" data-art="Miniature painting & crafts" data-desc="Jaipur is an important centre for Rajasthani miniature painting, decorative arts, jewellery and crafts.">8</button>
+          <button class="real-pin" style="left:47.7%;top:39.0%" data-number="9" data-place="Sanchi" data-state="Madhya Pradesh" data-art="Buddhist architecture & sculpture" data-desc="Sanchi is known for its Buddhist monuments, stupas, gateways and sculptural reliefs.">9</button>
+        </div>
+      </div>
+      
+<div class="map-number-legend">
+  <strong>Numbered Art Locations</strong>
+  <span><b>1</b> Ajanta</span><span><b>2</b> Ellora</span><span><b>3</b> Thanjavur</span>
+  <span><b>4</b> Khajuraho</span><span><b>5</b> Madhubani</span><span><b>6</b> Warli</span>
+  <span><b>7</b> Puri</span><span><b>8</b> Jaipur</span><span><b>9</b> Sanchi</span>
+</div>
+
+      <div class="map-footnote">Base map: Wikimedia Commons — India states and union territories map. The map is static for reliable classroom demonstration; the markers are interactive.</div>
+    </div>
+
+    <aside class="map-info-panel" id="realMapInfo">
+      <div class="map-kicker">SELECT A LOCATION</div>
+      <h3>Indian Art Locations</h3>
+      <p>Click a marker on the map or choose a location below.</p>
+      <div class="map-location-buttons">
+        <button data-map-place="Ajanta Caves"><b>1</b> Ajanta Caves<span>Maharashtra · Cave murals</span></button>
+        <button data-map-place="Ellora Caves"><b>2</b> Ellora Caves<span>Maharashtra · Rock-cut art</span></button>
+        <button data-map-place="Thanjavur"><b>3</b> Thanjavur<span>Tamil Nadu · Chola art</span></button>
+        <button data-map-place="Khajuraho"><b>4</b> Khajuraho<span>Madhya Pradesh · Temple sculpture</span></button>
+        <button data-map-place="Madhubani"><b>5</b> Madhubani<span>Bihar · Mithila painting</span></button>
+        <button data-map-place="Warli Region"><b>6</b> Warli Region<span>Maharashtra · Warli painting</span></button>
+        <button data-map-place="Puri / Raghurajpur"><b>7</b> Puri / Raghurajpur<span>Odisha · Pattachitra</span></button>
+        <button data-map-place="Jaipur"><b>8</b> Jaipur<span>Rajasthan · Miniature arts</span></button>
+        <button data-map-place="Sanchi"><b>9</b> Sanchi<span>Madhya Pradesh · Buddhist art</span></button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="activity" id="activity3">
+<div class="section-head">
+<span class="eyebrow">ACTIVITY 3 · CO2</span>
+<h2>Regional Painting Fusion — Gond × Pattachitra</h2>
+<p>An original digital folk-art composition: Gond-inspired deer, trees, dots and rhythmic nature patterns are integrated with Pattachitra-inspired ornamental borders, floral motifs and layered decorative framing.</p>
+</div>
+
+<div class="fusion-layout">
+<div class="artwork-frame">
+<div class="artwork-title">FOREST • FOLK • FORM</div>
+<canvas id="fusionCanvas" width="900" height="610" aria-label="Original Gond and Pattachitra fusion artwork"></canvas>
+<div class="artwork-caption">Original digital fusion inspired by regional Indian painting elements</div>
+</div>
+
+<div class="fusion-panel">
+<div class="fusion-tag">INTERACTIVE ARTWORK</div>
+<h3>Gond × Pattachitra</h3>
+<p class="fusion-intro">Use the controls to study each visual language separately and then view the complete fusion.</p>
+
+<div class="fusion-controls">
+<button id="gondBtn" class="fusion-btn">Gond Elements</button>
+<button id="pattachitraBtn" class="fusion-btn">Pattachitra Elements</button>
+<button id="fusionBtn" class="fusion-btn primary">Show Fusion</button>
+<button id="resetFusion" class="fusion-btn light">Reset</button>
+</div>
+
+<div class="fusion-info">
+<div class="fusion-info-block">
+<strong>Gond</strong>
+<span>Organic animals, plants, dots, flowing lines and rhythmic nature-inspired patterns.</span>
+</div>
+<div class="fusion-info-block">
+<strong>Pattachitra</strong>
+<span>Decorative borders, floral motifs, ornamental framing and detailed line work.</span>
+</div>
+</div>
+
+<div class="fusion-status" id="fusionStatus">Fusion artwork displayed</div>
+</div>
+</div>
+</section>
+
+<footer>
+<b>CLA-I • EXPLORING INDIAN ART</b><br>
+Nikshitha Sri . P • RA2411003010108 • B1<br>
+DR. M.L. SWORNA KOKILA • INDIAN ART FORM
+</footer>
+
+<script>
+/* ACTIVITY 1 — TIMELINE */
+(function(){
+  const modal = document.getElementById("timelineModal");
+  const close = document.getElementById("timelineClose");
+  const cards = document.querySelectorAll(".timeline-card");
+
+  function openTimelineCard(card){
+    if(!modal || !card) return;
+    const get = key => card.getAttribute("data-" + key) || "";
+    document.getElementById("modalTitle").textContent = get("title");
+    document.getElementById("modalPeriod").textContent = get("period");
+    document.getElementById("modalArt").textContent = get("art");
+    document.getElementById("modalMedium").textContent = get("medium");
+    document.getElementById("modalContext").textContent = get("context");
+    document.getElementById("modalSignificance").textContent = get("significance");
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  cards.forEach(card => {
+    const btn = card.querySelector(".timeline-btn");
+    if(btn){
+      btn.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openTimelineCard(card);
+      });
+    }
+    card.addEventListener("click", function(e){
+      if(e.target.closest(".timeline-btn")) return;
+      openTimelineCard(card);
+    });
+  });
+
+  function closeTimeline(){
+    if(!modal) return;
+    modal.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+  if(close) close.addEventListener("click", closeTimeline);
+  if(modal) modal.addEventListener("click", e => {
+    if(e.target === modal) closeTimeline();
+  });
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape") closeTimeline();
+  });
+})();
+/* ACTIVITY 2 — MAP */
+const sites=[
+["Sanchi Stupa",23.479,77.739,"Madhya Pradesh","Buddhist architecture","The stupa complex is known for gateways, reliefs and Buddhist architectural development."],
+["Konark Sun Temple",19.887,86.094,"Odisha","Stone temple sculpture","The monumental temple is famous for sculptural decoration and its chariot-like architectural conception."],
+["Thanjavur",10.787,79.137,"Tamil Nadu","Chola temple and bronze traditions","The region is strongly associated with Chola temple culture and sophisticated bronze imagery."],
+["Kutch",23.733,69.859,"Gujarat","Embroidery and textile traditions","Kutch contains diverse textile practices featuring embroidery, mirror work and regional decoration."],
+["Madhubani",26.35,86.07,"Bihar","Mithila painting","Mithila painting uses symbolic subjects, repeated patterns and strong contour lines."],
+["Palakkad",10.786,76.654,"Kerala","Mural and visual traditions","Kerala's visual culture includes richly coloured mural traditions connected with temples and performance."],
+["Warli belt",19.8,73.0,"Maharashtra","Warli painting","Geometric forms show people, animals, farming, celebrations and relationships with nature."],
+["Jaipur",26.912,75.787,"Rajasthan","Miniature and decorative arts","Rajasthan developed miniature painting traditions alongside jewellery, textile and decorative crafts."],
+["Srinagar",34.0837,74.7973,"Jammu & Kashmir","Papier-mâché and decorative craft","The region is associated with detailed surface decoration and craft traditions including papier-mâché."]
+];
+function mapPopup(s){
+return `<h2>${s[0]}</h2><b>Region:</b> ${s[3]}<br><b>Tradition:</b> ${s[4]}<p>${s[5]}</p>`;
+}
+
+function showMapFallback(){
+document.getElementById("map").style.display="none";
+document.getElementById("mapFallback").style.display="block";
+const list=document.getElementById("locationList");
+sites.forEach(s=>{
+const b=document.createElement("button");
+b.type="button";
+b.style.cssText="text-align:left;background:#96452b;color:white;border:0;border-radius:12px;padding:13px;cursor:pointer";
+b.innerHTML=`<b>${s[0]}</b><br><small>${s[3]} • ${s[4]}</small>`;
+b.onclick=()=>alert(`${s[0]}\n\nRegion: ${s[3]}\nTradition: ${s[4]}\n\n${s[5]}`);
+list.appendChild(b);
+});
+}
+
+function initMap(){
+if(typeof L==="undefined"){showMapFallback();return;}
+try{
+const map=L.map("map").setView([22.7,79.2],5);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{maxZoom:18,attribution:"© OpenStreetMap contributors"}).addTo(map);
+sites.forEach(s=>L.marker([s[1],s[2]]).addTo(map).bindPopup(mapPopup(s)));
+setTimeout(()=>map.invalidateSize(),250);
+}catch(e){showMapFallback();}
+}
+window.addEventListener("leaflet-ready",initMap,{once:true}); window.addEventListener("leaflet-failed",showMapFallback,{once:true}); if(typeof L!=="undefined") initMap(); setTimeout(()=>{if(typeof L==="undefined" && document.getElementById("mapFallback").style.display==="none") showMapFallback()},3500);
+
+/* ACTIVITY 3 — GOND × PATTACHITRA FUSION */
+(function(){
+  const c = document.getElementById("fusionCanvas");
+  if(!c) return;
+  const ctx = c.getContext("2d");
+  let showG = true, showP = true;
+
+  function resizeCanvas(){
+    const ratio = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    const w = c.clientWidth || 900;
+    const h = Math.round(w * 0.68);
+    c.style.height = h + "px";
+    c.width = Math.round(w * ratio);
+    c.height = Math.round(h * ratio);
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    draw();
+  }
+
+  function line(points){
+    ctx.beginPath();
+    points.forEach((p,i)=>i ? ctx.lineTo(p[0],p[1]) : ctx.moveTo(p[0],p[1]));
+    ctx.stroke();
+  }
+  function dot(x,y,r=2,fill="#6b2e20"){ctx.beginPath();ctx.fillStyle=fill;ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
+  function petal(cx,cy,rx,ry,a,stroke="#6b2e20"){
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(a);
+    ctx.beginPath();ctx.ellipse(0,-ry,rx,ry,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+  }
+  function sun(x,y,r){
+    ctx.strokeStyle="#6b2e20";ctx.lineWidth=2.2;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();
+    for(let i=0;i<16;i++){
+      const a=i*Math.PI/8;
+      line([[x+Math.cos(a)*r,y+Math.sin(a)*r],[x+Math.cos(a)*(r+10),y+Math.sin(a)*(r+10)]]);
+    }
+    dot(x,y,5,"#c58a35");
+  }
+  function gondDots(path,spacing=11){
+    for(let i=0;i<path.length-1;i++){
+      const [x1,y1]=path[i], [x2,y2]=path[i+1];
+      const d=Math.hypot(x2-x1,y2-y1), n=Math.max(1,Math.floor(d/spacing));
+      for(let j=0;j<=n;j++){const t=j/n;dot(x1+(x2-x1)*t,y1+(y2-y1)*t,1.6);}
+    }
+  }
+  function gondDeer(x,y,s){
+    ctx.strokeStyle="#5c321f";ctx.lineWidth=3;
+    ctx.beginPath();ctx.ellipse(x,y,s*.48,s*.25,0,0,Math.PI*2);ctx.stroke();
+    line([[x-s*.42,y-s*.05],[x-s*.58,y-s*.30],[x-s*.45,y-s*.48]]);
+    line([[x-s*.58,y-s*.30],[x-s*.70,y-s*.40]]);
+    line([[x-s*.58,y-s*.30],[x-s*.55,y-s*.52]]);
+    line([[x+s*.25,y+s*.18],[x+s*.18,y+s*.62]]);
+    line([[x+s*.05,y+s*.20],[x-s*.02,y+s*.62]]);
+    line([[x+s*.40,y+s*.10],[x+s*.52,y+s*.55]]);
+    line([[x+s*.22,y-s*.20],[x+s*.50,y-s*.38],[x+s*.62,y-s*.22]]);
+    gondDots([[x-s*.30,y],[x-s*.12,y-s*.10],[x+s*.10,y],[x+s*.28,y+s*.08]],9);
+  }
+  function gondTree(x,y,s){
+    ctx.strokeStyle="#4d3923";ctx.lineWidth=4;
+    line([[x,y+s*.55],[x,y-s*.15]]);
+    for(let i=0;i<7;i++){
+      const a=-Math.PI*.9+i*Math.PI*.3;
+      line([[x,y-s*.05],[x+Math.cos(a)*s*.55,y-s*.15+Math.sin(a)*s*.55]]);
+    }
+    for(let i=0;i<18;i++){
+      const a=i*Math.PI*2/18, rr=s*(.32+.1*(i%3));
+      dot(x+Math.cos(a)*rr,y-s*.28+Math.sin(a)*rr*.65,2.3,"#315b3b");
+    }
+  }
+  function pattachitraBorder(W,H){
+    ctx.strokeStyle="#7b2c20";ctx.lineWidth=5;ctx.strokeRect(16,16,W-32,H-32);
+    ctx.strokeStyle="#d1a04a";ctx.lineWidth=3;ctx.strokeRect(27,27,W-54,H-54);
+    const step=28;
+    for(let x=45;x<W-45;x+=step){
+      petal(x,47,5,10,0); petal(x,H-47,5,10,Math.PI);
+    }
+    for(let y=70;y<H-70;y+=step){
+      petal(47,y,5,10,Math.PI/2); petal(W-47,y,5,10,-Math.PI/2);
+    }
+    for(let x=62;x<W-62;x+=36){dot(x,62,2.5);dot(x,H-62,2.5);}
+  }
+  function draw(){
+    const W=c.clientWidth||900,H=c.clientHeight||610;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle="#f1d9a7";ctx.fillRect(0,0,W,H);
+
+    if(showP){
+      pattachitraBorder(W,H);
+      ctx.strokeStyle="#7b2c20";ctx.lineWidth=2;
+      for(let i=0;i<5;i++){ctx.strokeRect(70+i*7,70+i*7,W-140-i*14,H-140-i*14);}
+      sun(W*.50,H*.24,35);
+    }
+    if(showG){
+      gondTree(W*.22,H*.55,110);
+      gondTree(W*.78,H*.58,90);
+      gondDeer(W*.47,H*.62,120);
+      gondDeer(W*.66,H*.73,78);
+      ctx.strokeStyle="#315b3b";ctx.lineWidth=2;
+      for(let i=0;i<15;i++){
+        const x=W*.12+i*W*.055, y=H*.35+Math.sin(i)*12;
+        line([[x,y],[x+14,y-18],[x+28,y]]);
+        gondDots([[x,y],[x+14,y-18],[x+28,y]],8);
+      }
+    }
+    // central lotus to visually connect the two traditions
+    ctx.strokeStyle="#7b2c20";ctx.lineWidth=2.5;
+    const cx=W*.5,cy=H*.78;
+    for(let i=0;i<10;i++) petal(cx,cy,14,34,i*Math.PI/5);
+    dot(cx,cy,9,"#c58a35");
+  }
+
+  function setStatus(text){
+    const el=document.getElementById("fusionStatus");
+    if(el) el.textContent=text;
+  }
+  document.getElementById("gondBtn")?.addEventListener("click",()=>{
+    showG=!showG; draw(); setStatus(showG ? "Gond elements visible" : "Gond elements hidden");
+  });
+  document.getElementById("pattachitraBtn")?.addEventListener("click",()=>{
+    showP=!showP; draw(); setStatus(showP ? "Pattachitra elements visible" : "Pattachitra elements hidden");
+  });
+  document.getElementById("fusionBtn")?.addEventListener("click",()=>{
+    showG=true;showP=true;draw();setStatus("Complete Gond × Pattachitra fusion displayed");
+  });
+  document.getElementById("resetFusion")?.addEventListener("click",()=>{
+    showG=true;showP=true;draw();setStatus("Artwork reset — full fusion displayed");
+  });
+  window.addEventListener("resize",resizeCanvas);
+  resizeCanvas();
+})();
+</script>
+</body>
+</html>
